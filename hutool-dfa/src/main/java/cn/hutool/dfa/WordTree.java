@@ -102,23 +102,26 @@ public class WordTree extends HashMap<Character, WordTree> {
 		WordTree parent = null;
 		WordTree current = this;
 		WordTree child;
-		char currentChar = 0;
-		final int length = word.length();
+		char currentChar;
+		int length = word.length();
+		char endChar = 0;
 		for (int i = 0; i < length; i++) {
-			currentChar = word.charAt(i);
-			if (charFilter.accept(currentChar)) {//只处理合法字符
-				child = current.get(currentChar);
-				if (child == null) {
-					//无子类，新建一个子节点后存放下一个字符
-					child = new WordTree();
-					current.put(currentChar, child);
-				}
-				parent = current;
-				current = child;
+		    currentChar = word.charAt(i);
+		    //只处理合法字符
+		    if (isAccept(currentChar)) {
+			child = current.get(currentChar);
+			if (child == null) {
+			    //无子类，新建一个子节点后存放下一个字符
+			    child = new WordTree();
+			    current.put(currentChar, child);
 			}
+			parent = current;
+			current = child;
+			endChar = currentChar;
+		    }
 		}
 		if (null != parent) {
-			parent.setEnd(currentChar);
+		    parent.setEnd(endChar);
 		}
 		return this;
 	}
